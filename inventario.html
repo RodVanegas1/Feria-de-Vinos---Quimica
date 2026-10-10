@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inventario Mosto — Equipo (Daniela, Vanegas, Adriel, Sara, Santiago)</title>
+<script src="datos.js"></script>
+<style>
+:root{--bg:#111417;--card:#1c2127;--card2:#242c34;--txt:#f2f4f6;--mut:#9aa6b2;--acc:#7c5cff;--ok:#2ecc71;--warn:#f39c12;--bad:#e74c3c;--line:#2e3740}
+*{box-sizing:border-box;font-family:'Segoe UI',system-ui,Arial,sans-serif}
+body{background:var(--bg);color:var(--txt);margin:0;padding:0 0 80px}
+header{position:sticky;top:0;z-index:20;background:#171c21;border-bottom:1px solid var(--line);padding:12px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+header h1{font-size:18px;margin:0}
+header small{color:var(--mut);display:block;font-weight:400}
+.badge{background:var(--card2);border:1px solid var(--line);padding:4px 10px;border-radius:20px;font-size:12px}
+.dot{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:6px}
+.dot.on{background:var(--ok);box-shadow:0 0 8px var(--ok)} .dot.off{background:var(--warn)}
+main{max-width:980px;margin:0 auto;padding:16px}
+.grid{display:grid;gap:14px}
+@media(min-width:820px){.grid2{grid-template-columns:1fr 1fr}.grid2{display:grid}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
+.card h2{margin:0 0 10px;font-size:16px}
+label{display:block;font-size:13px;color:var(--mut);margin:10px 0 4px}
+select,input[type=number],input[type=text],textarea{width:100%;background:#0f1317;border:1px solid var(--line);color:var(--txt);border-radius:10px;padding:10px;font-size:15px}
+select:focus,input:focus{outline:2px solid var(--acc)}
+.row{display:flex;gap:10px}.row>*{flex:1}
+button{background:var(--acc);color:#fff;border:0;border-radius:10px;padding:11px 14px;font-size:15px;font-weight:600;cursor:pointer;margin-top:10px;width:100%}
+button.ghost{background:var(--card2);border:1px solid var(--line)}
+button.small{width:auto;padding:7px 12px;font-size:13px;margin:4px 4px 0 0}
+button.danger{background:#3a1d1d;border:1px solid var(--bad);color:#ffb3b3}
+.check{display:flex;align-items:center;gap:10px;background:#0f1317;border:1px solid var(--line);border-radius:10px;padding:10px;margin-top:10px}
+.check input{width:22px;height:22px;accent-color:var(--ok)}
+.tabs{display:flex;gap:8px;margin:14px 0;flex-wrap:wrap}
+.tabs button{width:auto;margin:0}
+.tabs button.active{background:var(--ok);color:#06240f}
+.item{border:1px solid var(--line);border-radius:12px;padding:12px;margin:10px 0;background:#171d23}
+.item .top{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap}
+.item .need{font-size:13px;color:var(--mut)}
+.bar{height:10px;background:#0d1114;border-radius:8px;overflow:hidden;margin:8px 0;border:1px solid var(--line)}
+.bar>div{height:100%;transition:width .4s}
+.pill{display:inline-block;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:700}
+.ok{background:#123d22;color:#7dffa9} .part{background:#4a3405;color:#ffcf6b} .miss{background:#4a1414;color:#ff9d9d}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.chip{background:var(--card2);border:1px solid var(--line);border-radius:16px;padding:3px 10px;font-size:12px}
+.log{max-height:260px;overflow:auto;font-size:13px}
+.log div{padding:7px 8px;border-bottom:1px solid var(--line)}
+.log time{color:var(--mut);font-size:11px;display:block}
+#toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:#000;border:1px solid var(--ok);color:#c9ffd9;padding:10px 16px;border-radius:12px;display:none;z-index:99;max-width:92vw}
+.help{font-size:13px;color:var(--mut);line-height:1.55}
+.help ol{padding-left:18px}
+.aporte{border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin:6px 0;font-size:13px;background:#0f1419;display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap}
+.progress-global{display:flex;gap:10px;align-items:center;margin:8px 0}
+.kpi{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
+.kpi div{background:#0f1317;border:1px solid var(--line);border-radius:10px;padding:8px 14px;flex:1;min-width:110px;text-align:center}
+.kpi b{font-size:20px;display:block}
+summary{cursor:pointer;font-weight:700}
+</style>
+</head>
+<body>
+<header>
+<div style="flex:1;min-width:220px">
+<h1>🍷 Inventario Mosto — 11 L / ~10% alcohol <small>Equipo: Daniela · Vanegas · Adriel · Sara · Santiago</small></h1>
+</div>
+<span class="badge"><span id="syncDot" class="dot off"></span><span id="syncTxt">sin vincular</span></span>
+<span class="badge">🔄 <span id="lastUpd">—</span></span>
+</header>
+
+<main>
+<div class="card help">
+<details open>
+<summary>❓ Cómo vincular (OneDrive o GitHub) — léeme 1 min</summary>
+<div class="row" style="margin:10px 0">
+<button class="ghost small" id="btnModoOD" onclick="setModo('od')">📁 Modo OneDrive</button>
+<button class="ghost small" id="btnModoGH" onclick="setModo('gh')">🐙 Modo GitHub (recomendado p/ en vivo real)</button>
+</div>
+<div id="panelOD">
+<ol>
+<li>Copia <b>inventario.html + datos.js</b> a la carpeta compartida de OneDrive.</li>
+<li>Cada persona abre <b>inventario.html</b> (Chrome/Edge) y pulsa <b>🔗 Vincular datos.js</b> → selecciona el <code>datos.js</code> de esa carpeta → <b>Aceptar / Permitir escritura</b>. Queda vinculado <b>para siempre</b> en ese PC (ya no pide reemplazar).</li>
+<li>Registra normal. Al guardar, la app <b>escribe directo</b> en el datos.js de OneDrive. OneDrive lo sube y a los demás les aparece solo en ~5 seg.</li>
+<li>Si el navegador bloquea lo auto, usa <b>🔄 Buscar cambios</b> o <b>📂 Importar datos.js</b>.</li>
+</ol>
+<div class="row">
+<button class="ghost small" onclick="vincularArchivo()">🔗 Vincular datos.js</button>
+<button class="ghost small" onclick="desvincularArchivo()">❌ Desvincular</button>
+<button class="ghost small" onclick="recargarCompartido(true)">🔄 Buscar cambios ahora</button>
+</div>
+<div id="odEstado" style="font-size:12px;color:var(--mut);margin-top:6px">Estado: sin vincular</div>
+<label class="small" style="display:flex;align-items:center;gap:6px;margin-top:8px"><input type="checkbox" id="autoSync" checked style="width:18px;height:18px"> Auto cada 5s</label>
+</div>
+<div id="panelGH" style="display:none">
+<p style="font-size:13px">Sí, se puede por GitHub y es <b>mejor</b> que OneDrive: todos abren la misma URL y los cambios se suben al repo solos, sin reemplazar archivos a mano. Necesitas 1 repo + 1 token (solo lo crea 1 persona, luego comparte la config).</p>
+<ol>
+<li>En GitHub crea un repo público (ej: <code>inventario-mosto</code>) y sube <b>inventario.html + datos.js</b>. Activa <b>Settings → Pages → Deploy from branch → main /(root)</b>. Te dará una URL tipo <code>https://TU-USUARIO.github.io/inventario-mosto/inventario.html</code>. Esa URL la abren los 5.</li>
+<li>Crea un token: GitHub → foto perfil → <b>Settings → Developer settings → Personal access tokens → Fine-grained</b> → Generate → solo ese repo → permiso <b>Contents: Read and write</b> → copiar el <code>github_pat_…</code>.</li>
+<li>Llena esto (una vez) y pulsa <b>Conectar</b>. Luego comparte con el equipo el mismo owner/repo/path (el token puedes ponerlo tú en cada PC o usar 1 token compartido solo para este repo).</li>
+</ol>
+<div class="row"><div><label>Owner (usuario/org)</label><input type="text" id="ghOwner" placeholder="ej: vanegas12"></div><div><label>Repo</label><input type="text" id="ghRepo" placeholder="ej: inventario-mosto"></div></div>
+<div class="row"><div><label>Archivo (path)</label><input type="text" id="ghPath" value="datos.js"></div><div><label>Rama</label><input type="text" id="ghBranch" value="main"></div></div>
+<label>Token (github_pat_…) — se guarda solo en este navegador</label><input type="text" id="ghToken" placeholder="pegar token aquí">
+<div class="row">
+<button class="ghost small" onclick="guardarGHConfig()">💾 Guardar config</button>
+<button class="ghost small" onclick="probarGH()">🔌 Probar conexión</button>
+<button class="ghost small" onclick="ghSincronizar(true)">🔄 Bajar / Subir ahora</button>
+</div>
+<div id="ghEstado" style="font-size:12px;color:var(--mut);margin-top:6px">GitHub: no configurado</div>
+</div>
+</details>
+</div>
+
+<div class="grid grid2">
+<div class="card">
+<h2>👤 Yo soy</h2>
+<label>Elige tu nombre (desplegable)</label>
+<select id="yoSoy"><option value="">— Seleccionar —</option></select>
+<div class="progress-global"><div style="flex:1"><div class="bar"><div id="barGlobal" style="width:0%;background:var(--ok)"></div></div></div><b id="pctGlobal">0%</b></div>
+<div class="kpi"><div><b id="kOk">0</b><span>completos</span></div><div><b id="kPart">0</b><span>parciales</span></div><div><b id="kMiss">0</b><span>faltan</span></div></div>
+</div>
+
+<div class="card">
+<h2>➕ Registrar aporte</h2>
+<label>Persona que lo lleva * (desplegable)</label>
+<select id="fPersona"></select>
+<label>Categoría *</label>
+<select id="fCat"><option value="Ingredientes">🧪 Ingredientes</option><option value="Materiales">🧰 Materiales</option></select>
+<label>Material * (desplegable)</label>
+<select id="fItem"></select>
+<div id="needInfo" class="need"></div>
+<label>¿Qué cantidad aportas? * (desplegable)</label>
+<select id="fTipo"><option value="total">✅ Total (toda la necesaria)</option><option value="parcial">🌓 Parcial (mitad)</option><option value="otra">✏️ Otra (ingresar cantidad)</option></select>
+<div class="row"><div><label>Cantidad (numérica)</label><input type="number" id="fCant" min="0" step="any"></div><div><label>Unidad</label><input type="text" id="fUni" readonly></div></div>
+<label class="check"><input type="checkbox" id="fTengo" checked> <span><b>Lo tengo / lo llevo</b><br><small style="color:var(--mut)">Desmárcalo si es solo promesa / pendiente</small></span></label>
+<label>Nota (opcional)</label><input type="text" id="fNota" placeholder="Ej: lo llevo el sábado, marca X…">
+<button onclick="guardarAporte()">💾 Guardar aporte y sincronizar</button>
+<button class="ghost" onclick="descargarDatos()">⬇️ Descargar datos.js para OneDrive</button>
+</div>
+</div>
+
+<div class="tabs">
+<button class="active" onclick="verTab('resumen',this)">✅ Checklist resumen</button>
+<button onclick="verTab('aportes',this)">📝 Aportes (<span id="nAportes">0</span>)</button>
+<button onclick="verTab('vivo',this)">📡 En vivo</button>
+</div>
+
+<div class="card" id="tab-resumen">
+<h2>✅ Checklist — qué tenemos y qué falta</h2>
+<label>Filtrar</label>
+<select id="filtro" onchange="render()"><option value="todo">Ver todo</option><option value="falta">Solo lo que falta</option><option value="ok">Solo completos</option><option value="Ingredientes">Solo ingredientes</option><option value="Materiales">Solo materiales</option></select>
+<div id="lista"></div>
+<button class="ghost" onclick="copiarResumen()">📋 Copiar resumen para WhatsApp</button>
+</div>
+
+<div class="card" id="tab-aportes" style="display:none">
+<h2>📝 Aportes registrados</h2>
+<div id="aportes"></div>
+<div class="row"><button class="ghost small" onclick="exportarJSON()">Exportar respaldo</button><button class="ghost small" onclick="document.getElementById('imp').click()">Importar respaldo</button><input type="file" id="imp" accept=".json,.js" style="display:none"><button class="danger small" onclick="borrarTodo()">Borrar todo</button></div>
+<div class="row"><button class="ghost small" onclick="document.getElementById('impDatos').click()">📂 Importar datos.js manual</button><input type="file" id="impDatos" accept=".js" style="display:none"></div>
+</div>
+
+<div class="card" id="tab-vivo" style="display:none">
+<h2>📡 En vivo — lo que cada quien agrega</h2>
+<div class="log" id="log"></div>
+</div>
+</main>
+<div id="toast"></div>
+
+<script>
+/* ============ CATÁLOGO BASE (de tus imágenes) ============ */
+const PERSONAS=["Daniela","Vanegas","Adriel","Sara","Santiago"];
+const CATALOGO=[
+{c:"Ingredientes",n:"🫐 Arándanos",need:"2.8 kg (~6 lb)",num:2.8,uni:"kg",detalle:"Base sabor arándano"},
+{c:"Ingredientes",n:"🥭 Mango maduro",need:"3.5 kg (~8 lb)",num:3.5,uni:"kg",detalle:"Base sabor mango"},
+{c:"Ingredientes",n:"🌺 Jamaica",need:"½ lb (~220 g)",num:220,uni:"g",detalle:"Base jamaica con canela"},
+{c:"Ingredientes",n:"🪵 Canela (ramas)",need:"3 ramas",num:3,uni:"ramas",detalle:"Para jamaica con canela"},
+{c:"Ingredientes",n:"🍋 Limones (solo jugo)",need:"8 limones",num:8,uni:"limones",detalle:"Solo para mango"},
+{c:"Ingredientes",n:"🍬 Azúcar",need:"5 kg (~11 lb) total",num:5,uni:"kg",detalle:"1.6 arándano + 1.9 jamaica + 1.5 mango"},
+{c:"Ingredientes",n:"🍇 Pasas",need:"300 g",num:300,uni:"g",detalle:"Compra total"},
+{c:"Ingredientes",n:"🍞 Levadura de pan",need:"2 sobres (1½ cdta x 3)",num:2,uni:"sobres",detalle:"1½ cdta por garrafón"},
+{c:"Ingredientes",n:"💧 Agua purificada",need:"~27 L (8.5+10+8)",num:27,uni:"L",detalle:"Hasta completar 11 L c/u"},
+{c:"Materiales",n:"🛢️ Garrafones 19 L",need:"3",num:3,uni:"garrafones",detalle:"Uno por sabor"},
+{c:"Materiales",n:"🎈 Globos + ligas + aguja",need:"3 + 3 + 1",num:7,uni:"piezas",detalle:"3 globos, 3 ligas, 1 aguja"},
+{c:"Materiales",n:"🥤 Licuadora",need:"1",num:1,uni:"licuadora",detalle:""},
+{c:"Materiales",n:"🪣 Colador grande + tela limpia",need:"1",num:1,uni:"kit",detalle:"Gasa, manta o pañito nuevo"},
+{c:"Materiales",n:"🍲 Olla grande",need:"1",num:1,uni:"olla",detalle:""},
+{c:"Materiales",n:"🔻 Embudo y cuchara larga",need:"1 de cada",num:2,uni:"piezas",detalle:"1 embudo + 1 cuchara"},
+{c:"Materiales",n:"🧴 Cloro sin aroma",need:"1 botella pequeña",num:1,uni:"botella",detalle:"Para sanitizar"},
+{c:"Materiales",n:"📼 Cinta adhesiva",need:"1 (marcar 11 L)",num:1,uni:"cinta",detalle:"Marcar nivel 11 L"},
+{c:"Materiales",n:"🥛 Vasitos de cata ~100 ml",need:"90",num:90,uni:"vasitos",detalle:"Para cata"}
+];
+CATALOGO.forEach((x,i)=>x.id="it"+i);
+
+/* ============ ESTADO ============ */
+let DB={version:1,updatedAt:new Date().toISOString(),updatedBy:"—",aportes:[],log:[]};
+let fileHandle=null;
+const LS="inventario-mosto-v1";
+const $=id=>document.getElementById(id);
+
+function toast(m){const t=$("toast");t.textContent=m;t.style.display="block";clearTimeout(t._h);t._h=setTimeout(()=>t.style.display="none",3200);}
+
+/* Init selects */
+PERSONAS.forEach(p=>{[$("yoSoy"),$("fPersona")].forEach(s=>{const o=document.createElement("option");o.value=o.textContent=p;s.appendChild(o);});});
+$("yoSoy").value=localStorage.getItem("yoSoy")||"";
+$("yoSoy").onchange=e=>localStorage.setItem("yoSoy",e.target.value);
+$("fCat").onchange=cargarItems; $("fTipo").onchange=calcCant; $("fItem").onchange=calcCant;
+function cargarItems(){const c=$("fCat").value;$("fItem").innerHTML="";CATALOGO.filter(x=>x.c===c).forEach(x=>{const o=document.createElement("option");o.value=x.id;o.textContent=x.n+" — necesita: "+x.need;$("fItem").appendChild(o);});calcCant();}
+function itemActual(){return CATALOGO.find(x=>x.id===$("fItem").value);}
+function calcCant(){const it=itemActual();if(!it)return;$("fUni").value=it.uni;$("needInfo").innerHTML="📌 Necesario total: <b>"+it.need+"</b> "+(it.detalle?"· "+it.detalle:"");const t=$("fTipo").value;$("fCant").readOnly=(t!=="otra");if(t==="total")$("fCant").value=it.num;else if(t==="parcial")$("fCant").value=Math.round(it.num/2*100)/100;}
+cargarItems();
+
+/* Cargar inicial: datos.js > localStorage */
+try{const ls=JSON.parse(localStorage.getItem(LS)||"null");if(ls&&ls.version)DB=ls;}catch(e){}
+if(window.INVENTARIO_DATA&&window.INVENTARIO_DATA.version>=(DB.version||0)){DB=window.INVENTARIO_DATA;}
+render();pintarModo();pintarGH();restaurarVinculo();
+if(MODO==="gh")ghLoad(false);
+
+/* ============ GUARDAR ============ */
+function guardarAporte(){
+const persona=$("fPersona").value||$("yoSoy").value;
+if(!persona){alert("Elige la persona que lo lleva (desplegable).");return;}
+const it=itemActual();if(!it){alert("Elige el material.");return;}
+let cant=parseFloat($("fCant").value);
+if(isNaN(cant)||cant<=0){alert("Pon una cantidad numérica válida.");return;}
+const tipo=$("fTipo").value, tengo=$("fTengo").checked, nota=$("fNota").value.trim();
+const ap={id:"a"+Date.now(),persona,itemId:it.id,cantidad:cant,unidad:it.uni,tipo,tengo,nota,ts:new Date().toISOString()};
+DB.aportes.push(ap);
+DB.log.unshift({ts:ap.ts,quien:persona,texto:(tengo?"✅ Lleva ":"📝 Promete ")+cant+" "+it.uni+" de "+it.n+(nota?" ("+nota+")":"")});
+DB.version++;DB.updatedAt=new Date().toISOString();DB.updatedBy=persona;
+$("fNota").value="";
+persist();render();toast("Guardado: "+persona+" → "+it.n);
+sincGuardar();
+}
+function persist(){try{localStorage.setItem(LS,JSON.stringify(DB));}catch(e){}}
+
+/* ============ RESUMEN ============ */
+function resumenPorItem(){return CATALOGO.map(it=>{const aps=DB.aportes.filter(a=>a.itemId===it.id&&a.tengo);const suma=aps.reduce((s,a)=>s+Number(a.cantidad||0),0);const pct=Math.min(100,Math.round(suma/it.num*100));const est=pct>=100?"ok":pct>0?"part":"miss";return{it,aps,suma,pct,est};});}
+function render(){
+const R=resumenPorItem(),f=$("filtro").value;
+let ok=0,part=0,miss=0;R.forEach(r=>{r.est==="ok"?ok++:r.est==="part"?part++:miss++;});
+$("kOk").textContent=ok;$("kPart").textContent=part;$("kMiss").textContent=miss;
+const tot=Math.round(ok/R.length*100);$("barGlobal").style.width=tot+"%";$("pctGlobal").textContent=tot+"%";
+$("nAportes").textContent=DB.aportes.length;
+$("lastUpd").textContent=(DB.updatedBy||"—")+" · "+new Date(DB.updatedAt).toLocaleString();
+let h="";
+R.filter(r=>f==="todo"?true:f==="falta"?r.est!=="ok":f==="ok"?r.est==="ok":r.it.c===f).forEach(r=>{
+const color=r.est==="ok"?"var(--ok)":r.est==="part"?"var(--warn)":"var(--bad)";
+const pill=r.est==="ok"?'<span class="pill ok">✔ Completo</span>':r.est==="part"?'<span class="pill part">🌓 Parcial '+r.pct+'%</span>':'<span class="pill miss">❌ Falta</span>';
+h+='<div class="item"><div class="top"><b>'+r.it.n+'</b>'+pill+'</div><div class="need">Necesario: <b>'+r.it.need+'</b> · Llevan: <b>'+r.suma+' '+r.it.uni+'</b> ('+r.pct+'%)</div><div class="bar"><div style="width:'+r.pct+'%;background:'+color+'"></div></div><div class="chips">'+(r.aps.length?r.aps.map(a=>'<span class="chip">👤 '+a.persona+': '+a.cantidad+' '+a.unidad+(a.tipo==="parcial"?" (mitad)":a.tipo==="otra"?" (otra)":" (total)")+(a.nota?" — "+a.nota:"")+'</span>').join(""):'<span class="chip">Nadie lo ha registrado 😟</span>')+'</div></div>';
+});
+$("lista").innerHTML=h||"<p>Nada con ese filtro.</p>";
+let h2=DB.aportes.slice().reverse().map(a=>{const it=CATALOGO.find(x=>x.id===a.itemId);return '<div class="aporte"><span>'+(a.tengo?"✅":"⏳")+' <b>'+a.persona+'</b> → '+a.cantidad+' '+a.unidad+' de <b>'+(it?it.n:"?")+'</b> <small style="color:var(--mut)">'+new Date(a.ts).toLocaleString()+'</small></span><span><button class="ghost small" onclick="borrarAporte(\''+a.id+'\')">Eliminar</button></span></div>';}).join("");
+$("aportes").innerHTML=h2||"<p>Sin aportes aún.</p>";
+$("log").innerHTML=(DB.log||[]).map(l=>"<div>💬 <b>"+l.quien+"</b>: "+l.texto+"<time>"+new Date(l.ts).toLocaleString()+"</time></div>").join("")||"<p>Sin actividad.</p>";
+}
+function verTab(id,btn){["resumen","aportes","vivo"].forEach(t=>$("tab-"+t).style.display=t===id?"block":"none");document.querySelectorAll(".tabs button").forEach(b=>b.classList.remove("active"));btn.classList.add("active");}
+function borrarAporte(id){if(!confirm("¿Eliminar este aporte?"))return;const a=DB.aportes.find(x=>x.id===id);DB.aportes=DB.aportes.filter(x=>x.id!==id);DB.log.unshift({ts:new Date().toISOString(),quien:$("yoSoy").value||"Alguien",texto:"🗑️ Eliminó aporte de "+(a?a.persona:"?")});DB.version++;DB.updatedAt=new Date().toISOString();DB.updatedBy=$("yoSoy").value||"Alguien";sincGuardar();}
+function borrarTodo(){if(!confirm("¿Borrar TODO el inventario?"))return;DB={version:(DB.version||1)+1,updatedAt:new Date().toISOString(),updatedBy:$("yoSoy").value||"Alguien",aportes:[],log:[{ts:new Date().toISOString(),quien:"Sistema",texto:"Se reinició el inventario"}]};sincGuardar();}
+function copiarResumen(){const R=resumenPorItem();let t="🍷 INVENTARIO MOSTO ("+new Date().toLocaleDateString()+")\n";R.forEach(r=>{t+=(r.est==="ok"?"✅ ":r.est==="part"?"🌓 ":"❌ ")+r.it.n+": "+r.suma+"/"+r.it.num+" "+r.it.uni+(r.aps.length?" ("+r.aps.map(a=>a.persona+":"+a.cantidad).join(", ")+")":" (FALTA)")+"\n";});navigator.clipboard.writeText(t).then(()=>toast("Resumen copiado para WhatsApp 📋"));}
+
+/* ============ SINCRONIZACIÓN: OneDrive vinculado + GitHub ============ */
+let MODO=localStorage.getItem("inv-modo")||"od";
+let ghSha=null;
+const LS_GH="inv-gh-config";
+function datosJSContenido(){return "/* DATOS COMPARTIDOS - Inventario Mosto */\n/* Generado "+new Date().toLocaleString()+" por "+DB.updatedBy+" */\nwindow.INVENTARIO_DATA = "+JSON.stringify(DB,null,2)+";\n";}
+function setModo(m){MODO=m;localStorage.setItem("inv-modo",m);pintarModo();}
+function pintarModo(){$("panelOD").style.display=MODO==="od"?"block":"none";$("panelGH").style.display=MODO==="gh"?"block":"none";$("btnModoOD").style.border=MODO==="od"?"2px solid var(--ok)":"1px solid var(--line)";$("btnModoGH").style.border=MODO==="gh"?"2px solid var(--ok)":"1px solid var(--line)";marcarSync(MODO==="gh"?"github":"local");}
+/* --- IndexedDB para recordar el archivo vinculado --- */
+function idbOpen(){return new Promise((res,rej)=>{const r=indexedDB.open("inventario-od",1);r.onupgradeneeded=()=>r.result.createObjectStore("h");r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error);});}
+async function idbSet(k,v){const db=await idbOpen();return new Promise((res,rej)=>{const tx=db.transaction("h","readwrite");tx.objectStore("h").put(v,k);tx.oncomplete=()=>res();tx.onerror=()=>rej(tx.error);});}
+async function idbGet(k){const db=await idbOpen();return new Promise((res,rej)=>{const tx=db.transaction("h","readonly");const q=tx.objectStore("h").get(k);q.onsuccess=()=>res(q.result);q.onerror=()=>rej(q.error);});}
+async function idbDel(k){const db=await idbOpen();return new Promise((res,rej)=>{const tx=db.transaction("h","readwrite");tx.objectStore("h").delete(k);tx.oncomplete=()=>res();tx.onerror=()=>rej(tx.error);});}
+async function vincularArchivo(){
+try{
+if(!window.showOpenFilePicker){alert("Tu navegador no soporta vinculación directa. Usa Chrome o Edge en PC. Alternativa: usa el Modo GitHub o reemplaza datos.js a mano.");return;}
+const [h]=await window.showOpenFilePicker({types:[{description:"datos.js",accept:{"text/javascript":[".js"]}}]});
+const perm=await h.requestPermission({mode:"readwrite"});
+if(perm!=="granted"){alert("Sin permiso de escritura no puedo vincular. Inténtalo de nuevo y pulsa Permitir.");return;}
+fileHandle=h;await idbSet("datosjs",h);
+$("odEstado").textContent="Estado: ✅ vinculado a "+(h.name||"datos.js")+" — Guardar escribe directo, sin descargas.";
+marcarSync("vinculado");toast("🔗 Vinculado para siempre en este PC ✔");
+await leerArchivoVinculado();
+}catch(e){if(e&&e.name!=="AbortError")alert("No se pudo vincular: "+e.message);}
+}
+async function desvincularArchivo(){fileHandle=null;try{await idbDel("datosjs");}catch(e){}$("odEstado").textContent="Estado: sin vincular";marcarSync("local");toast("Desvinculado");}
+async function restaurarVinculo(){
+try{
+const h=await idbGet("datosjs");if(!h)return;
+if(await h.queryPermission({mode:"readwrite"})==="granted"){fileHandle=h;$("odEstado").textContent="Estado: ✅ vinculado a "+(h.name||"datos.js");marcarSync("vinculado");await leerArchivoVinculado();}
+else{$("odEstado").textContent="Estado: vinculado pero sin permiso — pulsa Vincular de nuevo y objet Permitir.";}
+}catch(e){}
+}
+async function leerArchivoVinculado(){
+if(!fileHandle)return false;
+try{const f=await fileHandle.getFile();const txt=await f.text();const m=txt.match(/window\.INVENTARIO_DATA\s*=\s*(\{[\s\S]*\});?/);if(!m)return false;
+const obj=JSON.parse(m[1]);if(obj.version>(DB.version||0)){DB=obj;persist();render();marcarSync("vivo");toast("📡 Cambio recibido de "+(DB.updatedBy||"compañero"));return true;}}catch(e){}
+return false;
+}
+async function escribirArchivoVinculado(){
+if(!fileHandle)return false;
+try{const w=await fileHandle.createWritable();await w.write(new Blob([datosJSContenido()],{type:"text/javascript"}));await w.close();marcarSync("vinculado");return true;}catch(e){$("odEstado").textContent="⚠️ Se perdió el permiso. Vuelve a vincular.";return false;}
+}
+async function descargarDatos(auto){
+if(MODO==="gh"){ghSincronizar(false,true);return;}
+if(fileHandle){const ok=await escribirArchivoVinculado();if(ok){toast("☁️ Guardado directo en OneDrive ✔");return;}}
+const blob=new Blob([datosJSContenido()],{type:"text/javascript"});
+const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="datos.js";document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},800);
+if(auto)toast("⬇️ Se descargó datos.js → muévelo a OneDrive reemplazando el anterior (o pulsa Vincular para no hacer esto más)");
+marcarSync("descargado");
+}
+/* --- GitHub como backend compartido --- */
+function ghConfig(){try{return JSON.parse(localStorage.getItem(LS_GH)||"{}");}catch(e){return{};}}
+function pintarGH(){const c=ghConfig();$("ghOwner").value=c.owner||"";$("ghRepo").value=c.repo||"";$("ghPath").value=c.path||"datos.js";$("ghBranch").value=c.branch||"main";$("ghToken").value=c.token||"";$("ghEstado").textContent=c.owner?"GitHub: "+c.owner+"/"+c.repo+" @"+c.branch+" → "+c.path:"GitHub: no configurado";}
+function guardarGHConfig(){const c={owner:$("ghOwner").value.trim(),repo:$("ghRepo").value.trim(),path:$("ghPath").value.trim()||"datos.js",branch:$("ghBranch").value.trim()||"main",token:$("ghToken").value.trim()};if(!c.owner||!c.repo||!c.token){alert("Completa owner, repo y token.");return;}localStorage.setItem(LS_GH,JSON.stringify(c));$("ghEstado").textContent="Config guardada ✔. Pulsa Probar conexión.";toast("GitHub configurado ✔");}
+const b64e=s=>btoa(unescape(encodeURIComponent(s)));const b64d=s=>decodeURIComponent(escape(atob(s.replace(/\n/g,""))));
+async function ghLoad(manual){
+const c=ghConfig();if(!c.owner)return null;
+try{
+const r=await fetch("https://api.github.com/repos/"+c.owner+"/"+c.repo+"/contents/"+encodeURIComponent(c.path)+"?ref="+encodeURIComponent(c.branch),{headers:{Accept:"application/vnd.github+json",Authorization:"Bearer "+c.token}});
+if(!r.ok)throw new Error("GitHub "+r.status);
+const j=await r.json();ghSha=j.sha;const txt=b64d(j.content);
+const m=txt.match(/window\.INVENTARIO_DATA\s*=\s*(\{[\s\S]*\});?/);const obj=JSON.parse(m?m[1]:txt);
+if(obj.version>(DB.version||0)){DB=obj;persist();render();marcarSync("github");if(manual)toast("🐙 Actualizado desde GitHub (v"+obj.version+")");else if(obj.version!==lastSeen){toast("📡 Nuevo cambio de "+(obj.updatedBy||"compañero"));lastSeen=obj.version;}}
+else if(manual)toast("Ya estás al día ✔ (v"+DB.version+")");
+$("ghEstado").textContent="GitHub: conectado ✔ v"+DB.version+" · "+new Date().toLocaleTimeString();
+return obj;
+}catch(e){if(manual)alert("Falló GitHub: "+e.message+"\nRevisa owner/repo/token/rama.");return null;}
+}
+async function ghSave(){
+const c=ghConfig();if(!c.owner||!c.token)return false;
+try{
+if(!ghSha){await ghLoad(false);}
+const body={message:"Inventario: actualiza "+DB.updatedBy+" v"+DB.version,content:b64e(datosJSContenido()),branch:c.branch};if(ghSha)body.sha=ghSha;
+const r=await fetch("https://api.github.com/repos/"+c.owner+"/"+c.repo+"/contents/"+encodeURIComponent(c.path),{method:"PUT",headers:{Accept:"application/vnd.github+json",Authorization:"Bearer "+c.token,"Content-Type":"application/json"},body:JSON.stringify(body)});
+if(!r.ok){const t=await r.text();throw new Error("GitHub "+r.status+" "+t.slice(0,200));}
+const j=await r.json();ghSha=j.content.sha;$("ghEstado").textContent="GitHub: subido ✔ v"+DB.version;marcarSync("github");return true;
+}catch(e){toast("⚠️ No se pudo subir a GitHub: "+e.message);return false;}
+}
+async function probarGH(){const o=await ghLoad(true);if(o)toast("🐙 Conexión OK: "+ghConfig().owner+"/"+ghConfig().repo);}
+async function ghSincronizar(manual,subir){
+if(subir){const ok=await ghSave();if(!ok&&manual)toast("Revisa la config de GitHub");return;}
+await ghLoad(manual);
+}
+async function sincGuardar(){
+persist();render();
+if(MODO==="gh"){const ok=await ghSave();toast(ok?"🐙 Subido a GitHub ✔ Todos lo verán en segundos":"⚠️ Guardado local, falló GitHub");if(!ok)descargarRespaldo();return;}
+if(fileHandle){const ok=await escribirArchivoVinculado();toast(ok?"☁️ Guardado en OneDrive ✔":"⚠️ Guardado local");if(!ok)descargarRespaldo();return;}
+descargarRespaldo();
+}
+function descargarRespaldo(){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([datosJSContenido()],{type:"text/javascript"}));a.download="datos.js";document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},800);}
+function marcarSync(m){const d=$("syncDot"),t=$("syncTxt");const map={vinculado:"☁️ OneDrive vinculado",github:"🐙 GitHub en vivo",vivo:"🟢 en vivo",descargado:"⬇️ listo p/reemplazar",local:"local"};d.className="dot "+((m==="vinculado"||m==="github"||m==="vivo")?"on":"off");t.textContent=map[m]||m;}
+let lastSeen=DB.version||1;
+function recargarCompartido(manual){
+if(MODO==="gh"){ghLoad(manual);return;}
+if(fileHandle){leerArchivoVinculado().then(c=>{if(!c&&manual)toast("Ya estás al día ✔ (v"+DB.version+")");});return;}
+const s=document.createElement("script");s.src="datos.js?v="+Date.now();
+s.onload=()=>{try{
+const ext=window.INVENTARIO_DATA;
+if(ext&&ext.version>(DB.version||0)){DB=ext;persist();render();marcarSync("vivo");
+const nuevo=(DB.log||[])[0];toast("📡 Nuevo cambio de "+(DB.updatedBy||"compañero")+": "+(nuevo?nuevo.texto:"actualizado"));lastSeen=DB.version;
+}else{if(manual)toast("Ya estás al día ✔ (v"+DB.version+")");}
+}catch(e){} s.remove();};
+s.onerror=()=>{if(manual)alert("No pude leer datos.js. Si usas OneDrive, pulsa Vincular. Si usas GitHub, cambia a Modo GitHub.");s.remove();};
+document.head.appendChild(s);
+}
+setInterval(()=>{if(MODO==="gh")ghLoad(false);else if($("autoSync")&&$("autoSync").checked)recargarCompartido(false);},MODO==="gh"?10000:5000);
+setInterval(()=>{if(MODO==="gh")ghLoad(false);},10000);
+window.addEventListener("storage",e=>{if(e.key===LS){try{DB=JSON.parse(e.newValue);render();toast("📡 Cambio en vivo recibido");}catch(err){}}});
+
+/* Importar manual */
+$("impDatos").onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const m=r.result.match(/window\.INVENTARIO_DATA\s*=\s*(\{[\s\S]*\});?/);const obj=JSON.parse(m?m[1]:r.result);if(obj.version>(DB.version||0)||confirm("¿Reemplazar con el archivo importado?")){DB=obj;persist();render();toast("📂 datos.js importado ✔");}}catch(err){alert("Archivo inválido");}};r.readAsText(f);};
+$("imp").onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{DB=JSON.parse(r.result);persist();render();}catch(err){alert("JSON inválido");}};r.readAsText(f);};
+function exportarJSON(){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(DB,null,2)],{type:"application/json"}));a.download="respaldo-inventario.json";a.click();}
+</script>
+</body>
+</html>
