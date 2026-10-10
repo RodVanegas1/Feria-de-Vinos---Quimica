@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inventario Mosto — Equipo</title>
+<script src="datos.js"></script>
+<style>
+:root{--bg:#111417;--card:#1c2127;--card2:#242c34;--txt:#f2f4f6;--mut:#9aa6b2;--acc:#7c5cff;--ok:#2ecc71;--warn:#f39c12;--bad:#e74c3c;--line:#2e3740}
+*{box-sizing:border-box;font-family:'Segoe UI',system-ui,Arial,sans-serif}
+body{background:var(--bg);color:var(--txt);margin:0;padding:0 0 80px}
+header{position:sticky;top:0;z-index:20;background:#171c21;border-bottom:1px solid var(--line);padding:12px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+header h1{font-size:18px;margin:0}
+header small{color:var(--mut);display:block;font-weight:400}
+.badge{background:var(--card2);border:1px solid var(--line);padding:4px 10px;border-radius:20px;font-size:12px}
+.dot{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:6px}
+.dot.on{background:var(--ok);box-shadow:0 0 8px var(--ok)} .dot.off{background:var(--warn)}
+main{max-width:980px;margin:0 auto;padding:16px}
+.grid{display:grid;gap:14px}
+@media(min-width:820px){.grid2{grid-template-columns:1fr 1fr}.grid2{display:grid}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
+.card h2{margin:0 0 10px;font-size:16px}
+label{display:block;font-size:13px;color:var(--mut);margin:10px 0 4px}
+select,input[type=number],input[type=text]{width:100%;background:#0f1317;border:1px solid var(--line);color:var(--txt);border-radius:10px;padding:10px;font-size:15px}
+.row{display:flex;gap:10px}.row>*{flex:1}
+button{background:var(--acc);color:#fff;border:0;border-radius:10px;padding:11px 14px;font-size:15px;font-weight:600;cursor:pointer;margin-top:10px;width:100%}
+button.ghost{background:var(--card2);border:1px solid var(--line)}
+button.small{width:auto;padding:7px 12px;font-size:13px;margin:4px 4px 0 0}
+button:disabled{opacity:.5;cursor:wait}
+.check{display:flex;align-items:center;gap:10px;background:#0f1317;border:1px solid var(--line);border-radius:10px;padding:10px;margin-top:10px}
+.check input{width:22px;height:22px;accent-color:var(--ok)}
+.tabs{display:flex;gap:8px;margin:14px 0;flex-wrap:wrap}
+.tabs button{width:auto;margin:0}
+.tabs button.active{background:var(--ok);color:#06240f}
+.item{border:1px solid var(--line);border-radius:12px;padding:12px;margin:10px 0;background:#171d23}
+.item .need{font-size:13px;color:var(--mut)}
+.bar{height:10px;background:#0d1114;border-radius:8px;overflow:hidden;margin:8px 0;border:1px solid var(--line)}
+.bar>div{height:100%}
+.pill{display:inline-block;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:700}
+.ok{background:#123d22;color:#7dffa9} .part{background:#4a3405;color:#ffcf6b} .miss{background:#4a1414;color:#ff9d9d}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.chip{background:var(--card2);border:1px solid var(--line);border-radius:16px;padding:3px 10px;font-size:12px}
+.log{max-height:260px;overflow:auto;font-size:13px}
+.log div{padding:7px 8px;border-bottom:1px solid var(--line)}
+.log time{color:var(--mut);font-size:11px;display:block}
+#toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:#000;border:1px solid var(--ok);color:#c9ffd9;padding:10px 16px;border-radius:12px;display:none;z-index:99;max-width:92vw}
+.aporte{border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin:6px 0;font-size:13px;background:#0f1419;display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap}
+.kpi{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
+.kpi div{background:#0f1317;border:1px solid var(--line);border-radius:10px;padding:8px 14px;flex:1;min-width:110px;text-align:center}
+.kpi b{font-size:20px;display:block}
+</style>
+</head>
+<body>
+<header>
+<div style="flex:1;min-width:220px">
+<h1>🍷 Inventario Mosto<small>Daniela · Vanegas · Adriel · Sara · Santiago</small></h1>
+</div>
+<span class="badge"><span id="syncDot" class="dot off"></span><span id="syncTxt">local</span></span>
+<span class="badge">🔄 <span id="lastUpd">—</span></span>
+</header>
+<main>
+
+<div class="card">
+<h2>🐙 Conexión GitHub</h2>
+<div class="row"><div><label>Owner</label><input type="text" id="ghOwner" placeholder="tu-usuario"></div><div><label>Repo</label><input type="text" id="ghRepo" placeholder="inventario-mosto"></div></div>
+<div class="row"><div><label>Archivo</label><input type="text" id="ghPath" value="datos.js"></div><div><label>Rama</label><input type="text" id="ghBranch" value="main"></div></div>
+<label>Token</label><input type="text" id="ghToken" placeholder="github_pat_...">
+<div class="row">
+<button type="button" class="ghost small" id="btnGhSave">💾 Guardar</button>
+<button type="button" class="ghost small" id="btnGhTest">🔌 Probar</button>
+<button type="button" class="ghost small" id="btnGhSync">🔄 Sincronizar</button>
+</div>
+<div id="ghEstado" style="font-size:12px;color:var(--mut);margin-top:6px">No configurado</div>
+</div>
+
+<div class="grid grid2" style="margin-top:14px">
+<div class="card">
+<h2>👤 Yo soy</h2>
+<label>Elige tu nombre</label>
+<select id="yoSoy"><option value="">— Seleccionar —</option></select>
+<div class="kpi"><div><b id="kOk">0</b><span>completos</span></div><div><b id="kPart">0</b><span>parciales</span></div><div><b id="kMiss">0</b><span>faltan</span></div></div>
+</div>
+<div class="card">
+<h2>➕ Registrar aporte</h2>
+<label>Persona que lo lleva *</label>
+<select id="fPersona"></select>
+<label>Categoría *</label>
+<select id="fCat"><option value="Ingredientes">🧪 Ingredientes</option><option value="Materiales">🧰 Materiales</option></select>
+<label>Material *</label>
+<select id="fItem"></select>
+<div id="needInfo" class="need"></div>
+<label>Cantidad *</label>
+<select id="fTipo"><option value="total">✅ Total</option><option value="parcial">🌓 Parcial (mitad)</option><option value="otra">✏️ Otra</option></select>
+<div class="row"><div><label>Cantidad</label><input type="number" id="fCant" min="0" step="any"></div><div><label>Unidad</label><input type="text" id="fUni" readonly></div></div>
+<label class="check"><input type="checkbox" id="fTengo" checked><span><b>Lo tengo / lo llevo</b></span></label>
+<label>Nota</label><input type="text" id="fNota" placeholder="Ej: lo llevo el sábado…">
+<button type="button" id="btnGuardar">💾 Guardar aporte</button>
+</div>
+</div>
+
+<div class="tabs">
+<button type="button" class="active" id="tRes">✅ Checklist</button>
+<button type="button" id="tApo">📝 Aportes (<span id="nAportes">0</span>)</button>
+<button type="button" id="tVivo">📡 En vivo</button>
+</div>
+
+<div class="card" id="tab-resumen">
+<h2>✅ Checklist</h2>
+<label>Filtrar</label>
+<select id="filtro"><option value="todo">Ver todo</option><option value="falta">Solo lo que falta</option><option value="ok">Solo completos</option><option value="Ingredientes">Solo ingredientes</option><option value="Materiales">Solo materiales</option></select>
+<div id="lista"></div>
+<button type="button" class="ghost" id="btnCopy">📋 Copiar resumen WhatsApp</button>
+</div>
+
+<div class="card" id="tab-aportes" style="display:none">
+<h2>📝 Aportes</h2>
+<div id="aportes"></div>
+</div>
+
+<div class="card" id="tab-vivo" style="display:none">
+<h2>📡 En vivo</h2>
+<div class="log" id="log"></div>
+</div>
+</main>
+<div id="toast"></div>
+
+<script>
+"use strict";
+const PERSONAS=["Daniela","Vanegas","Adriel","Sara","Santiago"];
+const CATALOGO=[
+{c:"Ingredientes",n:"🫐 Arándanos",need:"2.8 kg (~6 lb)",num:2.8,uni:"kg"},
+{c:"Ingredientes",n:"🥭 Mango maduro",need:"3.5 kg (~8 lb)",num:3.5,uni:"kg"},
+{c:"Ingredientes",n:"🌺 Jamaica",need:"½ lb (~220 g)",num:220,uni:"g"},
+{c:"Ingredientes",n:"🪵 Canela (ramas)",need:"3 ramas",num:3,uni:"ramas"},
+{c:"Ingredientes",n:"🍋 Limones (solo jugo)",need:"8 limones",num:8,uni:"limones"},
+{c:"Ingredientes",n:"🍬 Azúcar",need:"5 kg total",num:5,uni:"kg"},
+{c:"Ingredientes",n:"🍇 Pasas",need:"300 g",num:300,uni:"g"},
+{c:"Ingredientes",n:"🍞 Levadura de pan",need:"2 sobres",num:2,uni:"sobres"},
+{c:"Ingredientes",n:"💧 Agua purificada",need:"~27 L",num:27,uni:"L"},
+{c:"Materiales",n:"🛢️ Garrafones 19 L",need:"3",num:3,uni:"garrafones"},
+{c:"Materiales",n:"🎈 Globos + ligas + aguja",need:"3 + 3 + 1",num:7,uni:"piezas"},
+{c:"Materiales",n:"🥤 Licuadora",need:"1",num:1,uni:"licuadora"},
+{c:"Materiales",n:"🪣 Colador grande + tela",need:"1",num:1,uni:"kit"},
+{c:"Materiales",n:"🍲 Olla grande",need:"1",num:1,uni:"olla"},
+{c:"Materiales",n:"🔻 Embudo y cuchara larga",need:"1 de cada",num:2,uni:"piezas"},
+{c:"Materiales",n:"🧴 Cloro sin aroma",need:"1 botella",num:1,uni:"botella"},
+{c:"Materiales",n:"📼 Cinta adhesiva",need:"1",num:1,uni:"cinta"},
+{c:"Materiales",n:"🥛 Vasitos de cata",need:"90",num:90,uni:"vasitos"}
+];
+CATALOGO.forEach((x,i)=>x.id="it"+i);
+
+let DB={version:1,updatedAt:new Date().toISOString(),updatedBy:"—",aportes:[],log:[]};
+let ghSha=null, lastSeen=1, syncing=false;
+const LS="inventario-mosto-v1", LS_GH="inv-gh-config";
+const $=id=>document.getElementById(id);
+function toast(m){const t=$("toast");t.textContent=m;t.style.display="block";clearTimeout(t._h);t._h=setTimeout(()=>t.style.display="none",3500);console.log("[inv]",m);}
+function marcar(m){const map={local:"local",github:"🐙 GitHub en vivo",vivo:"🟢 en vivo"};$("syncDot").className="dot "+(m==="local"?"off":"on");$("syncTxt").textContent=map[m]||m;}
+function persist(){try{localStorage.setItem(LS,JSON.stringify(DB));}catch(e){}}
+
+/* selects */
+PERSONAS.forEach(p=>{[$("yoSoy"),$("fPersona")].forEach(s=>{const o=document.createElement("option");o.value=o.textContent=p;s.appendChild(o);});});
+$("yoSoy").value=localStorage.getItem("yoSoy")||"";
+$("yoSoy").addEventListener("change",e=>localStorage.setItem("yoSoy",e.target.value));
+function cargarItems(){const c=$("fCat").value;$("fItem").innerHTML="";CATALOGO.filter(x=>x.c===c).forEach(x=>{const o=document.createElement("option");o.value=x.id;o.textContent=x.n+" — "+x.need;$("fItem").appendChild(o);});calcCant();}
+function itemActual(){return CATALOGO.find(x=>x.id===$("fItem").value);}
+function calcCant(){const it=itemActual();if(!it)return;$("fUni").value=it.uni;const t=$("fTipo").value;$("fCant").readOnly=(t!=="otra");if(t==="total")$("fCant").value=it.num;else if(t==="parcial")$("fCant").value=Math.round(it.num/2*100)/100;$("needInfo").textContent="Necesario: "+it.need;}
+$("fCat").addEventListener("change",cargarItems);$("fTipo").addEventListener("change",calcCant);$("fItem").addEventListener("change",calcCant);
+cargarItems();
+
+/* estado inicial */
+try{const ls=JSON.parse(localStorage.getItem(LS)||"null");if(ls&&ls.version)DB=ls;}catch(e){}
+try{if(typeof INVENTARIO_DATA!=="undefined"&&INVENTARIO_DATA&&INVENTARIO_DATA.version>(DB.version||0))DB=INVENTARIO_DATA;}catch(e){}
+lastSeen=DB.version||1;
+
+/* resumen */
+function resumen(){return CATALOGO.map(it=>{const aps=DB.aportes.filter(a=>a.itemId===it.id&&a.tengo);const suma=aps.reduce((s,a)=>s+Number(a.cantidad||0),0);const pct=Math.min(100,Math.round(suma/it.num*100));return{it,aps,suma,pct,est:pct>=100?"ok":pct>0?"part":"miss"};});}
+function render(){
+const R=resumen(),f=$("filtro").value;
+let ok=0,part=0,miss=0;R.forEach(r=>{r.est==="ok"?ok++:r.est==="part"?part++:miss++;});
+$("kOk").textContent=ok;$("kPart").textContent=part;$("kMiss").textContent=miss;
+$("nAportes").textContent=DB.aportes.length;
+try{$("lastUpd").textContent=(DB.updatedBy||"—")+" · "+new Date(DB.updatedAt).toLocaleString();}catch(e){}
+let h="";R.filter(r=>f==="todo"?true:f==="falta"?r.est!=="ok":f==="ok"?r.est==="ok":r.it.c===f).forEach(r=>{
+const color=r.est==="ok"?"var(--ok)":r.est==="part"?"var(--warn)":"var(--bad)";
+const pill=r.est==="ok"?'<span class="pill ok">✔ Completo</span>':r.est==="part"?'<span class="pill part">🌓 '+r.pct+'%</span>':'<span class="pill miss">❌ Falta</span>';
+h+='<div class="item"><div><b>'+r.it.n+'</b> '+pill+'</div><div class="need">'+r.it.need+' · Llevan: <b>'+r.suma+' '+r.it.uni+'</b></div><div class="bar"><div style="width:'+r.pct+'%;background:'+color+'"></div></div><div class="chips">'+(r.aps.length?r.aps.map(a=>'<span class="chip">'+a.persona+': '+a.cantidad+' '+a.unidad+'</span>').join(""):'<span class="chip">Falta</span>')+'</div></div>';});
+$("lista").innerHTML=h||"<p>Nada.</p>";
+$("aportes").innerHTML=DB.aportes.slice().reverse().map(a=>{const it=CATALOGO.find(x=>x.id===a.itemId);return '<div class="aporte"><span>'+(a.tengo?"✅":"⏳")+' <b>'+a.persona+'</b> → '+a.cantidad+' '+a.unidad+' de <b>'+(it?it.n:"?")+'</b></span><span><button type="button" class="ghost small" data-del="'+a.id+'">Eliminar</button></span></div>';}).join("")||"<p>Sin aportes.</p>";
+document.querySelectorAll("[data-del]").forEach(b=>b.addEventListener("click",()=>borrarAporte(b.getAttribute("data-del"))));
+$("log").innerHTML=(DB.log||[]).map(l=>"<div><b>"+l.quien+"</b>: "+l.texto+"<time>"+new Date(l.ts).toLocaleString()+"</time></div>").join("")||"<p>Sin actividad.</p>";
+}
+$("filtro").addEventListener("change",render);
+function verTab(id){["resumen","aportes","vivo"].forEach(t=>$("tab-"+t).style.display=t===id?"block":"none");[["tRes","resumen"],["tApo","aportes"],["tVivo","vivo"]].forEach(([b,t])=>$(b).classList.toggle("active",t===id));}
+$("tRes").addEventListener("click",()=>verTab("resumen"));$("tApo").addEventListener("click",()=>verTab("aportes"));$("tVivo").addEventListener("click",()=>verTab("vivo"));
+$("btnCopy").addEventListener("click",()=>{let t="🍷 INVENTARIO ("+new Date().toLocaleDateString()+")\n";resumen().forEach(r=>{t+=(r.est==="ok"?"✅ ":r.est==="part"?"🌓 ":"❌ ")+r.it.n+": "+r.suma+"/"+r.it.num+" "+r.it.uni+"\n";});navigator.clipboard.writeText(t).then(()=>toast("Copiado 📋"));});
+
+/* guardar */
+async function guardarAporte(){
+const persona=$("fPersona").value||$("yoSoy").value;
+if(!persona){alert("Elige la persona.");return;}
+const it=itemActual();if(!it){alert("Elige el material.");return;}
+const cant=parseFloat($("fCant").value);
+if(!(cant>0)){alert("Cantidad inválida.");return;}
+DB.aportes.push({id:"a"+Date.now(),persona,itemId:it.id,cantidad:cant,unidad:it.uni,tipo:$("fTipo").value,tengo:$("fTengo").checked,nota:$("fNota").value.trim(),ts:new Date().toISOString()});
+DB.log.unshift({ts:new Date().toISOString(),quien:persona,texto:cant+" "+it.uni+" de "+it.n});
+DB.version++;DB.updatedAt=new Date().toISOString();DB.updatedBy=persona;
+$("fNota").value="";persist();render();
+toast("Guardado local. Subiendo a GitHub…");
+await ghSave();
+}
+$("btnGuardar").addEventListener("click",guardarAporte);
+async function borrarAporte(id){if(!confirm("¿Eliminar?"))return;DB.aportes=DB.aportes.filter(x=>x.id!==id);DB.version++;DB.updatedAt=new Date().toISOString();DB.updatedBy=$("yoSoy").value||"Alguien";persist();render();await ghSave();}
+
+/* GitHub */
+function ghCfg(){try{return JSON.parse(localStorage.getItem(LS_GH)||"{}");}catch(e){return{};}}
+function pintarGH(){const c=ghCfg();$("ghOwner").value=c.owner||"";$("ghRepo").value=c.repo||"";$("ghPath").value=c.path||"datos.js";$("ghBranch").value=c.branch||"main";$("ghToken").value=c.token||"";$("ghEstado").textContent=c.owner?c.owner+"/"+c.repo+" @"+c.branch:"No configurado";}
+const b64e=s=>btoa(unescape(encodeURIComponent(s)));
+const b64d=s=>decodeURIComponent(escape(atob(s.replace(/\s/g,""))));
+function ghPathEnc(p){return p.split("/").map(encodeURIComponent).join("/");}
+async function ghLoad(manual){
+const c=ghCfg();
+if(!c.owner||!c.repo||!c.token){if(manual)alert("Completa owner, repo y token.");return null;}
+if(syncing&&!manual)return null;syncing=true;
+try{
+const url="https://api.github.com/repos/"+c.owner+"/"+c.repo+"/contents/"+ghPathEnc(c.path||"datos.js")+"?ref="+encodeURIComponent(c.branch||"main");
+const r=await fetch(url,{headers:{Accept:"application/vnd.github+json",Authorization:"Bearer "+c.token}});
+if(r.status===404)throw new Error("Archivo no encontrado (revisa owner/repo/rama/path).");
+if(!r.ok)throw new Error("GitHub "+r.status);
+const j=await r.json();ghSha=j.sha;
+const m=b64d(j.content).match(/window\.INVENTARIO_DATA\s*=\s*(\{[\s\S]*\});?/);
+const obj=JSON.parse(m?m[1]:b64d(j.content));
+if(obj.version>(DB.version||0)){DB=obj;persist();render();marcar("github");if(obj.version!==lastSeen){toast("📡 Cambio de "+(obj.updatedBy||"compañero"));lastSeen=obj.version;}}
+else if(manual)toast("Al día ✔ (v"+DB.version+")");
+$("ghEstado").textContent="Conectado ✔ v"+DB.version+" · "+new Date().toLocaleTimeString();
+marcar("github");return obj;
+}catch(e){if(manual)alert("Falló: "+e.message);$("ghEstado").textContent="Error: "+e.message;return null;}
+finally{syncing=false;}
+}
+async function ghSave(){
+const c=ghCfg();
+if(!c.owner||!c.repo||!c.token){toast("Configura GitHub (se quedó local)");return false;}
+try{
+if(!ghSha)await ghLoad(false);
+const body={message:"Inventario v"+DB.version+" ("+DB.updatedBy+")",content:b64e("window.INVENTARIO_DATA = "+JSON.stringify(DB,null,2)+";\n"),branch:c.branch||"main"};
+if(ghSha)body.sha=ghSha;
+const r=await fetch("https://api.github.com/repos/"+c.owner+"/"+c.repo+"/contents/"+ghPathEnc(c.path||"datos.js"),{method:"PUT",headers:{Accept:"application/vnd.github+json",Authorization:"Bearer "+c.token,"Content-Type":"application/json"},body:JSON.stringify(body)});
+if(!r.ok){const t=await r.text();throw new Error("GitHub "+r.status+" "+t.slice(0,180));}
+ghSha=(await r.json()).content.sha;
+$("ghEstado").textContent="Subido ✔ v"+DB.version;marcar("github");lastSeen=DB.version;
+toast("🐙 Subido a GitHub ✔");return true;
+}catch(e){toast("No se pudo subir: "+e.message);$("ghEstado").textContent="Error: "+e.message;return false;}
+}
+$("btnGhSave").addEventListener("click",()=>{const c={owner:$("ghOwner").value.trim(),repo:$("ghRepo").value.trim(),path:$("ghPath").value.trim()||"datos.js",branch:$("ghBranch").value.trim()||"main",token:$("ghToken").value.trim()};if(!c.owner||!c.repo||!c.token){alert("Completa owner, repo y token.");return;}localStorage.setItem(LS_GH,JSON.stringify(c));ghSha=null;$("ghEstado").textContent="Guardado ✔";toast("Config guardada ✔");});
+$("btnGhTest").addEventListener("click",()=>ghLoad(true));
+$("btnGhSync").addEventListener("click",()=>ghLoad(true));
+
+/* init */
+render();pintarGH();marcar("local");
+(function(){const c=ghCfg();if(c.owner&&c.token)ghLoad(false);})();
+setInterval(()=>{const c=ghCfg();if(c.owner&&c.token)ghLoad(false);},10000);
+</script>
+</body>
+</html>
