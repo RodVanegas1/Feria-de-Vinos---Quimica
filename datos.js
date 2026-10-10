@@ -1,16 +1,25 @@
-/* DATOS COMPARTIDOS - Inventario Mosto */
-/* Este archivo vive en la misma carpeta OneDrive que inventario.html */
-/* No lo edites a mano: la app lo genera con "Guardar y sincronizar". */
 window.INVENTARIO_DATA = {
-  "version": 1,
-  "updatedAt": "2026-10-10T00:00:00.000Z",
-  "updatedBy": "Sistema",
-  "aportes": [],
+  "version": 2,
+  "updatedAt": "2026-10-10T05:20:58.864Z",
+  "updatedBy": "Vanegas",
+  "aportes": [
+    {
+      "id": "a1791609658864",
+      "persona": "Vanegas",
+      "itemId": "it10",
+      "cantidad": 3,
+      "unidad": "piezas",
+      "tipo": "otra",
+      "tengo": true,
+      "nota": "Ligas",
+      "ts": "2026-10-10T05:20:58.864Z"
+    }
+  ],
   "log": [
     {
-      "ts": "2026-10-10T00:00:00.000Z",
-      "quien": "Sistema",
-      "texto": "Inventario creado. ¡A registrar!"
+      "ts": "2026-10-10T05:20:58.864Z",
+      "quien": "Vanegas",
+      "texto": "3 piezas de 🎈 Globos + ligas + aguja"
     }
   ]
 };
