@@ -1,6 +1,6 @@
 window.INVENTARIO_DATA = {
-  "version": 2,
-  "updatedAt": "2026-10-10T05:20:58.864Z",
+  "version": 3,
+  "updatedAt": "2026-10-10T05:36:50.404Z",
   "updatedBy": "Vanegas",
   "aportes": [
     {
@@ -13,9 +13,25 @@ window.INVENTARIO_DATA = {
       "tengo": true,
       "nota": "Ligas",
       "ts": "2026-10-10T05:20:58.864Z"
+    },
+    {
+      "id": "a1791610610404",
+      "persona": "Vanegas",
+      "itemId": "it12",
+      "cantidad": 0.5,
+      "unidad": "kit",
+      "tipo": "parcial",
+      "tengo": true,
+      "nota": "Colador",
+      "ts": "2026-10-10T05:36:50.404Z"
     }
   ],
   "log": [
+    {
+      "ts": "2026-10-10T05:36:50.404Z",
+      "quien": "Vanegas",
+      "texto": "0.5 kit de 🪣 Colador grande + tela (Colador)"
+    },
     {
       "ts": "2026-10-10T05:20:58.864Z",
       "quien": "Vanegas",
