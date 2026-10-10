@@ -1,7 +1,7 @@
 window.INVENTARIO_DATA = {
-  "version": 3,
-  "updatedAt": "2026-10-10T05:36:50.404Z",
-  "updatedBy": "Vanegas",
+  "version": 4,
+  "updatedAt": "2026-10-10T18:40:18.718Z",
+  "updatedBy": "Adriel",
   "aportes": [
     {
       "id": "a1791609658864",
@@ -24,9 +24,25 @@ window.INVENTARIO_DATA = {
       "tengo": true,
       "nota": "Colador",
       "ts": "2026-10-10T05:36:50.404Z"
+    },
+    {
+      "id": "a1791657618718",
+      "persona": "Adriel",
+      "itemId": "it11",
+      "cantidad": 1,
+      "unidad": "licuadora",
+      "tipo": "total",
+      "tengo": true,
+      "nota": "",
+      "ts": "2026-10-10T18:40:18.718Z"
     }
   ],
   "log": [
+    {
+      "ts": "2026-10-10T18:40:18.718Z",
+      "quien": "Adriel",
+      "texto": "1 licuadora de 🥤 Licuadora"
+    },
     {
       "ts": "2026-10-10T05:36:50.404Z",
       "quien": "Vanegas",
