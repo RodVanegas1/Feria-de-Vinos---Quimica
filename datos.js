@@ -1,7 +1,7 @@
 window.INVENTARIO_DATA = {
-  "version": 4,
-  "updatedAt": "2026-10-10T18:40:18.718Z",
-  "updatedBy": "Adriel",
+  "version": 5,
+  "updatedAt": "2026-10-10T18:49:21.801Z",
+  "updatedBy": "Santiago",
   "aportes": [
     {
       "id": "a1791609658864",
@@ -35,9 +35,25 @@ window.INVENTARIO_DATA = {
       "tengo": true,
       "nota": "",
       "ts": "2026-10-10T18:40:18.718Z"
+    },
+    {
+      "id": "a1791658161801",
+      "persona": "Santiago",
+      "itemId": "it0",
+      "cantidad": 2.8,
+      "unidad": "kg",
+      "tipo": "total",
+      "tengo": true,
+      "nota": "",
+      "ts": "2026-10-10T18:49:21.801Z"
     }
   ],
   "log": [
+    {
+      "ts": "2026-10-10T18:49:21.801Z",
+      "quien": "Santiago",
+      "texto": "2.8 kg de 🫐 Arándanos"
+    },
     {
       "ts": "2026-10-10T18:40:18.718Z",
       "quien": "Adriel",
