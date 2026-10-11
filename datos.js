@@ -1,7 +1,7 @@
 window.INVENTARIO_DATA = {
-  "version": 8,
-  "updatedAt": "2026-10-11T09:11:22.619Z",
-  "updatedBy": "Vanegas",
+  "version": 12,
+  "updatedAt": "2026-10-11T09:12:32.546Z",
+  "updatedBy": "Adriel",
   "aportes": [
     {
       "id": "a1791609658864",
@@ -59,29 +59,39 @@ window.INVENTARIO_DATA = {
       "ts": "2026-10-11T09:10:22.182Z"
     },
     {
-      "id": "a1791709877914",
-      "persona": "Vanegas",
+      "id": "a1791709904059",
+      "persona": "Daniela",
       "itemId": "it8",
       "cantidad": 27,
       "unidad": "L",
       "tipo": "total",
       "tengo": true,
       "nota": "",
-      "ts": "2026-10-11T09:11:17.914Z"
+      "ts": "2026-10-11T09:11:44.059Z"
     },
     {
-      "id": "a1791709882619",
-      "persona": "Vanegas",
-      "itemId": "it8",
-      "cantidad": 27,
-      "unidad": "L",
+      "id": "a1791709952546",
+      "persona": "Adriel",
+      "itemId": "it17",
+      "cantidad": 90,
+      "unidad": "vasitos",
       "tipo": "total",
       "tengo": true,
-      "nota": "",
-      "ts": "2026-10-11T09:11:22.619Z"
+      "nota": "Se llevarán hasta el día de la feria",
+      "ts": "2026-10-11T09:12:32.546Z"
     }
   ],
   "log": [
+    {
+      "ts": "2026-10-11T09:12:32.546Z",
+      "quien": "Adriel",
+      "texto": "90 vasitos de 🥛 Vasitos de cata (Se llevarán hasta el día de la feria)"
+    },
+    {
+      "ts": "2026-10-11T09:11:44.059Z",
+      "quien": "Daniela",
+      "texto": "27 L de 💧 Agua purificada"
+    },
     {
       "ts": "2026-10-11T09:11:22.619Z",
       "quien": "Vanegas",
