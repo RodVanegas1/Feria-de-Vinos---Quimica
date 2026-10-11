@@ -1,6 +1,6 @@
 window.INVENTARIO_DATA = {
-  "version": 22,
-  "updatedAt": "2026-10-11T20:30:25.143Z",
+  "version": 23,
+  "updatedAt": "2026-10-11T20:45:48.151Z",
   "updatedBy": "Adriel",
   "aportes": [
     {
@@ -189,9 +189,25 @@ window.INVENTARIO_DATA = {
       "tengo": true,
       "nota": "",
       "ts": "2026-10-11T20:30:25.143Z"
+    },
+    {
+      "id": "a1791751548151",
+      "persona": "Adriel",
+      "itemId": "it10",
+      "cantidad": 3,
+      "unidad": "piezas",
+      "tipo": "otra",
+      "tengo": true,
+      "nota": "Globos",
+      "ts": "2026-10-11T20:45:48.151Z"
     }
   ],
   "log": [
+    {
+      "ts": "2026-10-11T20:45:48.151Z",
+      "quien": "Adriel",
+      "texto": "3 piezas de 🎈 Globos + ligas + aguja (Globos)"
+    },
     {
       "ts": "2026-10-11T20:30:25.143Z",
       "quien": "Adriel",
