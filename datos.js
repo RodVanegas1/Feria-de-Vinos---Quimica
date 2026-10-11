@@ -1,7 +1,7 @@
 window.INVENTARIO_DATA = {
-  "version": 6,
-  "updatedAt": "2026-10-11T09:10:22.182Z",
-  "updatedBy": "Daniela",
+  "version": 8,
+  "updatedAt": "2026-10-11T09:11:22.619Z",
+  "updatedBy": "Vanegas",
   "aportes": [
     {
       "id": "a1791609658864",
@@ -57,9 +57,41 @@ window.INVENTARIO_DATA = {
       "tengo": true,
       "nota": "",
       "ts": "2026-10-11T09:10:22.182Z"
+    },
+    {
+      "id": "a1791709877914",
+      "persona": "Vanegas",
+      "itemId": "it8",
+      "cantidad": 27,
+      "unidad": "L",
+      "tipo": "total",
+      "tengo": true,
+      "nota": "",
+      "ts": "2026-10-11T09:11:17.914Z"
+    },
+    {
+      "id": "a1791709882619",
+      "persona": "Vanegas",
+      "itemId": "it8",
+      "cantidad": 27,
+      "unidad": "L",
+      "tipo": "total",
+      "tengo": true,
+      "nota": "",
+      "ts": "2026-10-11T09:11:22.619Z"
     }
   ],
   "log": [
+    {
+      "ts": "2026-10-11T09:11:22.619Z",
+      "quien": "Vanegas",
+      "texto": "27 L de 💧 Agua purificada"
+    },
+    {
+      "ts": "2026-10-11T09:11:17.914Z",
+      "quien": "Vanegas",
+      "texto": "27 L de 💧 Agua purificada"
+    },
     {
       "ts": "2026-10-11T09:10:22.182Z",
       "quien": "Daniela",
