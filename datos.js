@@ -1,7 +1,7 @@
 window.INVENTARIO_DATA = {
-  "version": 12,
-  "updatedAt": "2026-10-11T09:12:32.546Z",
-  "updatedBy": "Adriel",
+  "version": 13,
+  "updatedAt": "2026-10-11T20:05:00.701Z",
+  "updatedBy": "Vanegas",
   "aportes": [
     {
       "id": "a1791609658864",
@@ -79,9 +79,25 @@ window.INVENTARIO_DATA = {
       "tengo": true,
       "nota": "Se llevarán hasta el día de la feria",
       "ts": "2026-10-11T09:12:32.546Z"
+    },
+    {
+      "id": "a1791749100701",
+      "persona": "Vanegas",
+      "itemId": "it13",
+      "cantidad": 1,
+      "unidad": "olla",
+      "tipo": "total",
+      "tengo": true,
+      "nota": "",
+      "ts": "2026-10-11T20:05:00.701Z"
     }
   ],
   "log": [
+    {
+      "ts": "2026-10-11T20:05:00.701Z",
+      "quien": "Vanegas",
+      "texto": "1 olla de 🍲 Olla grande"
+    },
     {
       "ts": "2026-10-11T09:12:32.546Z",
       "quien": "Adriel",
