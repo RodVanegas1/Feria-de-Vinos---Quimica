@@ -1,7 +1,7 @@
 window.INVENTARIO_DATA = {
-  "version": 5,
-  "updatedAt": "2026-10-10T18:49:21.801Z",
-  "updatedBy": "Santiago",
+  "version": 6,
+  "updatedAt": "2026-10-11T09:10:22.182Z",
+  "updatedBy": "Daniela",
   "aportes": [
     {
       "id": "a1791609658864",
@@ -46,9 +46,25 @@ window.INVENTARIO_DATA = {
       "tengo": true,
       "nota": "",
       "ts": "2026-10-10T18:49:21.801Z"
+    },
+    {
+      "id": "a1791709822182",
+      "persona": "Daniela",
+      "itemId": "it9",
+      "cantidad": 3,
+      "unidad": "garrafones",
+      "tipo": "total",
+      "tengo": true,
+      "nota": "",
+      "ts": "2026-10-11T09:10:22.182Z"
     }
   ],
   "log": [
+    {
+      "ts": "2026-10-11T09:10:22.182Z",
+      "quien": "Daniela",
+      "texto": "3 garrafones de 🛢️ Garrafones 19 L"
+    },
     {
       "ts": "2026-10-10T18:49:21.801Z",
       "quien": "Santiago",
