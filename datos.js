@@ -1,6 +1,6 @@
 window.INVENTARIO_DATA = {
-  "version": 17,
-  "updatedAt": "2026-10-11T20:09:12.886Z",
+  "version": 19,
+  "updatedAt": "2026-10-11T20:19:26.608Z",
   "updatedBy": "Sara",
   "aportes": [
     {
@@ -134,9 +134,41 @@ window.INVENTARIO_DATA = {
       "tengo": true,
       "nota": "",
       "ts": "2026-10-11T20:09:12.886Z"
+    },
+    {
+      "id": "a1791749401921",
+      "persona": "Daniela",
+      "itemId": "it12",
+      "cantidad": 0.5,
+      "unidad": "kit",
+      "tipo": "parcial",
+      "tengo": true,
+      "nota": "Tela",
+      "ts": "2026-10-11T20:10:01.921Z"
+    },
+    {
+      "id": "a1791749966608",
+      "persona": "Sara",
+      "itemId": "it1",
+      "cantidad": 3.5,
+      "unidad": "kg",
+      "tipo": "total",
+      "tengo": true,
+      "nota": "",
+      "ts": "2026-10-11T20:19:26.608Z"
     }
   ],
   "log": [
+    {
+      "ts": "2026-10-11T20:19:26.608Z",
+      "quien": "Sara",
+      "texto": "3.5 kg de 🥭 Mango maduro"
+    },
+    {
+      "ts": "2026-10-11T20:10:01.921Z",
+      "quien": "Daniela",
+      "texto": "0.5 kit de 🪣 Colador grande + tela (Tela)"
+    },
     {
       "ts": "2026-10-11T20:09:12.886Z",
       "quien": "Sara",
