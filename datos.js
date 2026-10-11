@@ -1,6 +1,6 @@
 window.INVENTARIO_DATA = {
-  "version": 21,
-  "updatedAt": "2026-10-11T20:23:00.564Z",
+  "version": 22,
+  "updatedAt": "2026-10-11T20:30:25.143Z",
   "updatedBy": "Adriel",
   "aportes": [
     {
@@ -178,9 +178,25 @@ window.INVENTARIO_DATA = {
       "tengo": true,
       "nota": "",
       "ts": "2026-10-11T20:23:00.563Z"
+    },
+    {
+      "id": "a1791750625143",
+      "persona": "Adriel",
+      "itemId": "it16",
+      "cantidad": 1,
+      "unidad": "cinta",
+      "tipo": "total",
+      "tengo": true,
+      "nota": "",
+      "ts": "2026-10-11T20:30:25.143Z"
     }
   ],
   "log": [
+    {
+      "ts": "2026-10-11T20:30:25.143Z",
+      "quien": "Adriel",
+      "texto": "1 cinta de 📼 Cinta adhesiva"
+    },
     {
       "ts": "2026-10-11T20:23:00.564Z",
       "quien": "Adriel",
