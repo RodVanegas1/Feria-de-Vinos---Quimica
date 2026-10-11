@@ -1,6 +1,6 @@
 window.INVENTARIO_DATA = {
-  "version": 13,
-  "updatedAt": "2026-10-11T20:05:00.701Z",
+  "version": 15,
+  "updatedAt": "2026-10-11T20:08:12.698Z",
   "updatedBy": "Vanegas",
   "aportes": [
     {
@@ -90,9 +90,41 @@ window.INVENTARIO_DATA = {
       "tengo": true,
       "nota": "",
       "ts": "2026-10-11T20:05:00.701Z"
+    },
+    {
+      "id": "a1791749126715",
+      "persona": "Vanegas",
+      "itemId": "it12",
+      "cantidad": 0.5,
+      "unidad": "kit",
+      "tipo": "parcial",
+      "tengo": true,
+      "nota": "Colador",
+      "ts": "2026-10-11T20:05:26.715Z"
+    },
+    {
+      "id": "a1791749292698",
+      "persona": "Vanegas",
+      "itemId": "it14",
+      "cantidad": 2,
+      "unidad": "piezas",
+      "tipo": "total",
+      "tengo": true,
+      "nota": "",
+      "ts": "2026-10-11T20:08:12.698Z"
     }
   ],
   "log": [
+    {
+      "ts": "2026-10-11T20:08:12.698Z",
+      "quien": "Vanegas",
+      "texto": "2 piezas de 🔻 Embudo y cuchara larga"
+    },
+    {
+      "ts": "2026-10-11T20:05:26.715Z",
+      "quien": "Vanegas",
+      "texto": "0.5 kit de 🪣 Colador grande + tela (Colador)"
+    },
     {
       "ts": "2026-10-11T20:05:00.701Z",
       "quien": "Vanegas",
