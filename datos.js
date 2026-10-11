@@ -1,7 +1,7 @@
 window.INVENTARIO_DATA = {
-  "version": 15,
-  "updatedAt": "2026-10-11T20:08:12.698Z",
-  "updatedBy": "Vanegas",
+  "version": 17,
+  "updatedAt": "2026-10-11T20:09:12.886Z",
+  "updatedBy": "Sara",
   "aportes": [
     {
       "id": "a1791609658864",
@@ -112,9 +112,41 @@ window.INVENTARIO_DATA = {
       "tengo": true,
       "nota": "",
       "ts": "2026-10-11T20:08:12.698Z"
+    },
+    {
+      "id": "a1791749346251",
+      "persona": "Sara",
+      "itemId": "it7",
+      "cantidad": 2,
+      "unidad": "sobres",
+      "tipo": "total",
+      "tengo": true,
+      "nota": "",
+      "ts": "2026-10-11T20:09:06.251Z"
+    },
+    {
+      "id": "a1791749352886",
+      "persona": "Sara",
+      "itemId": "it5",
+      "cantidad": 5,
+      "unidad": "kg",
+      "tipo": "total",
+      "tengo": true,
+      "nota": "",
+      "ts": "2026-10-11T20:09:12.886Z"
     }
   ],
   "log": [
+    {
+      "ts": "2026-10-11T20:09:12.886Z",
+      "quien": "Sara",
+      "texto": "5 kg de 🍬 Azúcar"
+    },
+    {
+      "ts": "2026-10-11T20:09:06.251Z",
+      "quien": "Sara",
+      "texto": "2 sobres de 🍞 Levadura de pan"
+    },
     {
       "ts": "2026-10-11T20:08:12.698Z",
       "quien": "Vanegas",
