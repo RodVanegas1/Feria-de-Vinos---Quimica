@@ -1,7 +1,7 @@
 window.INVENTARIO_DATA = {
-  "version": 19,
-  "updatedAt": "2026-10-11T20:19:26.608Z",
-  "updatedBy": "Sara",
+  "version": 21,
+  "updatedAt": "2026-10-11T20:23:00.564Z",
+  "updatedBy": "Adriel",
   "aportes": [
     {
       "id": "a1791609658864",
@@ -156,9 +156,41 @@ window.INVENTARIO_DATA = {
       "tengo": true,
       "nota": "",
       "ts": "2026-10-11T20:19:26.608Z"
+    },
+    {
+      "id": "a1791749986881",
+      "persona": "Sara",
+      "itemId": "it10",
+      "cantidad": 1,
+      "unidad": "piezas",
+      "tipo": "otra",
+      "tengo": true,
+      "nota": "Aguja",
+      "ts": "2026-10-11T20:19:46.881Z"
+    },
+    {
+      "id": "a1791750180563",
+      "persona": "Adriel",
+      "itemId": "it4",
+      "cantidad": 8,
+      "unidad": "limones",
+      "tipo": "total",
+      "tengo": true,
+      "nota": "",
+      "ts": "2026-10-11T20:23:00.563Z"
     }
   ],
   "log": [
+    {
+      "ts": "2026-10-11T20:23:00.564Z",
+      "quien": "Adriel",
+      "texto": "8 limones de 🍋 Limones (solo jugo)"
+    },
+    {
+      "ts": "2026-10-11T20:19:46.881Z",
+      "quien": "Sara",
+      "texto": "1 piezas de 🎈 Globos + ligas + aguja (Aguja)"
+    },
     {
       "ts": "2026-10-11T20:19:26.608Z",
       "quien": "Sara",
